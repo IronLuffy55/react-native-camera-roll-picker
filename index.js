@@ -193,7 +193,15 @@ class CameraRollPicker extends Component {
     var isSelected =
       this._arrayObjectIndexOf(selected, "uri", uri) >= 0 ? true : false;
     var filename = item.node.image.filename;
-    var disabled = this.props.disableFiles.indexOf(filename) > -1;
+    var uri = item.node.image.uri;
+    var disabled = false;
+    if (this.props.disableFiles.indexOf(filename) > -1) {
+      disabled = true;
+    } else if (this.props.disableUris.indexOf(uri) > -1) {
+      console.log("Disable>", item.node.image.uri);
+      disabled = true;
+    }
+
     // console.log("item>", item.node.image);
     return (
       <ImageItem
@@ -340,7 +348,8 @@ CameraRollPicker.propTypes = {
   emptyText: PropTypes.string,
   emptyTextStyle: Text.propTypes.style,
   loader: PropTypes.node,
-  disableFiles: PropTypes.array
+  disableFiles: PropTypes.array,
+  disableUris: PropTypes.array
 };
 
 CameraRollPicker.defaultProps = {
@@ -357,6 +366,7 @@ CameraRollPicker.defaultProps = {
   backgroundColor: "white",
   selected: [],
   disableFiles: [],
+  disableUris: [],
   callback: function(selectedImages, currentImage) {
     console.log(currentImage);
     console.log(selectedImages);
